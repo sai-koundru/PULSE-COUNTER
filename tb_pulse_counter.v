@@ -1,31 +1,26 @@
 `timescale 1ns / 1ps
 
-module xyz_tb;
+module tb_pulse_counter;
 
-  // Inputs
+
   reg clk;
   reg start;
   reg rst;
 
-  // Output
+
   wire op_sig;
 
-  // Instantiate the Unit Under Test (UUT)
-  xyz uut (
-    .clk(clk),
-    .start(start),
-    .rst(rst),
-    .op_sig(op_sig)
-  );
 
-  // Generate a 10ns clock (i.e., 100MHz)
+  tb_pulse_counter uut ( .clk(clk), .start(start), .rst(rst), .op_sig(op_sig) );
+
   always #5 clk = ~clk;
 
-  initial begin
-    // Initialize inputs
-    clk = 0;
-    rst = 1;
-    start = 0;
+  initial 
+  	begin
+
+		clk = 0;
+    		rst = 1;
+    		start = 0;
 
     // Wait some time with reset ON
     #20;
@@ -62,52 +57,4 @@ module xyz_tb;
     $finish;
   end
 
-endmodule
-
-
-
-
-
-
-
-
-
-
-
-
-
-module pulse_counter(
-	    input clk,
-	    input start,
-	    input rst,
-	    output reg op_sig
-	);
-
-reg [3:0] count;
-
-always @(posedge clk or posedge rst)
-begin
-if (rst)
-	begin
-	    count <= 0;
-        op_sig <= 0;
-    end
-else if (start)
-	begin
-	if (count != 9) 
-	    begin
-		count <= count + 1;
-op_sig <= 0;   
-end
-    else
-	    begin
-	    count <= 0;
-op_sig <= 1;  
-end
-end
-else 
-	begin 
-	op_sig <= 0;   
-  end 
-end
 endmodule
